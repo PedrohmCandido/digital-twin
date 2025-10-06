@@ -29,7 +29,7 @@ A arquitetura do projeto foi pensada para ser modular e escalável, utilizando a
 O projeto adota uma arquitetura de aplicação **distribuída**, separando o **serviço (Backend)** da **interface (Frontend)**. Essa separação permite que cada parte seja desenvolvida, implantada e escalada de forma independente. O Frontend se comunica com o Backend através de chamadas **RESTful API** para cadastro de usuários e envio/recebimento dos dados de saúde para análise.
 
 
-# BACKEND
+# BACKEND (FORK KAIKI)
 
 # 🏥 Medical API - Sistema de Gerenciamento de Pacientes e Dispositivos
 
@@ -268,6 +268,10 @@ router.delete("/:id", deletePatient);
 export default router;
 
 ```
+
+
+## Licença
+Todo esse trbalho está sendo construido com baso no repositório da organizaççao
 
 
 
