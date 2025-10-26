@@ -1,0 +1,33 @@
+.risco-baixo, .risco-baixo {
+    background-color:#c8e6c9;
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.risco-medio, .risco-medio {
+    background-color:#ffe0b2;
+    color: #f98c00;
+    font-weight: bold;
+}
+
+.risco-alto, .risco-alto {
+    background-color:#ffcdd2;
+    color: #c62828;
+    font-weight: bold;
+}
+
+.btn-return, .lp-container nav li a {
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+
+.btn-return {
+    background-color: #6c757d;
+    color: white;
+    margin-bottom: 20px;
+}
