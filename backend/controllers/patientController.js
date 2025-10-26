@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import Patient from "../models/Patient.js";
 
-const dbPath = path.resolve("./db.json");
+const dbPath = path.resolve("db/db.json");
 
 function loadDB() {
   const rawData = fs.readFileSync(dbPath, "utf-8");
