@@ -7,7 +7,6 @@
     "dev": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "mock": "json-server --watch db.json --port 4000"
-
   },
   "keywords": [],
   "author": "",
@@ -18,7 +17,9 @@
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "mongodb": "^6.18.0",
-    "mongoose": "^8.18.0"
+    "mongoose": "^8.18.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
