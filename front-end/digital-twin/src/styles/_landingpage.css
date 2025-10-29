@@ -1,0 +1,59 @@
+.lp-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.lp-header {
+    border-bottom: 2px solid #e0e6e9;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.lp-container nav {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+.lp-container nav li {
+    list-style: none;
+}
+
+.lp-container nav li a {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.data-list {
+    margin-bottom: 30px;
+}
+
+.data-list h2 {
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    border-left: 5px solid #007bff;
+    padding-left: 10px;
+    color: #007bff;
+}
+
+.data-list p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.Dashboard h2 {
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.1);;
+    padding-left: 10px;
+    border-left: 5px solid #007bff;
+    color: #007bff;
+}
