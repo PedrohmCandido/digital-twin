@@ -1,10 +1,16 @@
-export default class Patient {
-  constructor({ id, name, age, gender, condition, digitalTwinId }) {
-    this.id = id;
-    this.name = name;
-    this.age = age;
-    this.gender = gender;
-    this.condition = condition;
-    this.digitalTwinId = digitalTwinId;
-  }
-}
+import mongoose from "mongoose";
+
+const patientSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String },
+  phone: { type: String },
+  address: { type: String },
+  gender: { type: String, required: true },
+  birthdate: { type: Date, required: true },
+  illnesses: { type: [String], default: [] },
+});
+
+const Patient = mongoose.model("Patient", patientSchema);
+
+export default Patient;
+
