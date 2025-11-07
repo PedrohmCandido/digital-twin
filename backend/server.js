@@ -7,6 +7,7 @@ import devicesRouter from "./routers/devices.js";
 import folloUpRouter from "./routers/follow-up.js";
 import { swaggerUi, swaggerSpec } from "./swagger/swaggerConfig.js";
 import { connectDB } from "./db/db.js";
+import aiRouter from "./routers/aiRouter.js";
 
 
 connectDB();
@@ -27,5 +28,6 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/patients", patientsRouter);
 app.use("/devices", devicesRouter);
 app.use("/follow-up", folloUpRouter);
+app.use('/api/ai', aiRouter);
 
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
