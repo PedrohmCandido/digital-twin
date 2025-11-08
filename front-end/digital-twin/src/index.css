@@ -30,7 +30,7 @@ a:hover {
     color: #007bff;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   body {
     color: #e0e6e9;
     background-color: #1e1e1e;

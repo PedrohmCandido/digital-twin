@@ -8,6 +8,7 @@ import folloUpRouter from "./routers/follow-up.js";
 import { swaggerUi, swaggerSpec } from "./swagger/swaggerConfig.js";
 import { connectDB } from "./db/db.js";
 import aiRouter from "./routers/aiRouter.js";
+import auth from "./routers/auth.js";
 
 
 connectDB();
@@ -23,8 +24,9 @@ app.get("/", (req, res) => res.send("API is running..."));
 
 // Swagger Docs
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
+''
 // Rotas
+app.use("/auth", auth)
 app.use("/patients", patientsRouter);
 app.use("/devices", devicesRouter);
 app.use("/follow-up", folloUpRouter);
