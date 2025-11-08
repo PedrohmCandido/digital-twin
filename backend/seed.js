@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import Patient from "./models/Patient.js";
 import Device from "./models/Device.js";
-import FollowUp from "./models/follow-up.js";
+import FollowUp from "./models/Follow-up.js";
 
 dotenv.config();
 
