@@ -1,40 +1,53 @@
-export default function LandingPage() {
-  const paciente = {
-    nome: "João Silva",
-    idade: 30,
-    genero: "Masculino",
-    ultimaConsulta: "20-10-2025",
-    riscoGeral: "Baixo",
-  };
+// pages/LandingPage/LandingPage.tsx
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-   const riskClassName = paciente.riscoGeral === 'Baixo' ? 'status-baixo' : 'status-alerta';
+type User = {
+  name?: string;
+  email?: string;
+  // adicione outros campos se existirem no seu objeto salvo
+};
+
+function safeGetUser(): User | null {
+  try {
+    const raw = localStorage.getItem("user");
+    return raw ? (JSON.parse(raw) as User) : null;
+  } catch {
+    return null;
+  }
+}
+
+export default function LandingPage() {
+  const navigate = useNavigate();
+  const user = safeGetUser();
+
+  function handleLogout() {
+    localStorage.removeItem("user");
+    navigate("/login", { replace: true });
+  }
 
   return (
-    <>
-      <div className="lp-container">
-        <nav><li><a href="/login">Sair da Sistema</a></li></nav>
+    <div style={{ padding: 24 }}>
+      <header style={{ marginBottom: 16 }}>
+        <h1>Bem-vindo{user?.name ? `, ${user.name}` : ""}!</h1>
+        {user?.email && <p style={{ opacity: 0.8 }}>{user.email}</p>}
+      </header>
 
-        <header className="lp-header">
-          <h1>Bem vindo, {paciente.nome}</h1>
-          <p>Seu Painel de Acompanhamento de Saúde e Prevenção de Riscos</p>
-        </header>
+      <nav style={{ display: "flex", gap: 12, marginBottom: 24 }}>
+        <Link to="/dashboard">Ir para o Dashboard</Link>
+        <Link to="/ai-assistant">Assistente de IA</Link>
 
-        <section className="data-list">
-            <h2>Informações do Perfil</h2>
-            <p><strong>Idade:</strong> {paciente.idade} anos</p>
-            <p><strong>Gênero:</strong> {paciente.genero}</p>
-            <p>
-                <strong>Risco Geral Estimado: </strong>
-                <span>{paciente.riscoGeral}</span>
-            </p>
-            <p><strong>Última Atualização dos Dados:</strong> {paciente.ultimaConsulta}</p>
-        </section>
+        <button onClick={handleLogout}>Sair do Sistema</button>
+      </nav>
 
-        <section className="Dashboard">
-            <h2>Visão Completa</h2>
-            <p>Para visualizar suas métricas de saúde detalhadas e recomendações de prevenção, acesse <a href="/dashboard"> Painel de Acompanhamento</a></p>
-        </section>
-      </div>
-    </>
+      <main>
+        <p>Esta é a sua página inicial após o login.</p>
+        <ul>
+          <li>Use o menu acima para acessar o painel.</li>
+          <li>Ou experimente o assistente de IA.</li>
+          <li>Ao sair, você será levado à página de login.</li>
+        </ul>
+      </main>
+    </div>
   );
 }
