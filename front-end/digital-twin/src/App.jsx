@@ -33,64 +33,16 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Raiz redireciona conforme sessão */}
-        <Route
-          path="/"
-          element={
-            user ? (
-              <Navigate to="/dashboard" replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-
-        {/* Públicas (redireciona se já logado) */}
-        <Route
-          path="/login"
-          element={
-            <RedirectIfAuth>
-              <LoginPage />
-            </RedirectIfAuth>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <RedirectIfAuth>
-              <RegisterPage />
-            </RedirectIfAuth>
-          }
-        />
-
-        {/* Protegidas */}
-        <Route
-          path="/landing-page"
-          element={
-            <RequireAuth>
-              <LandingPage />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <RequireAuth>
-              <DashBoard />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/ai-assistant"
-          element={
-            <RequireAuth>
-              <AiAssistant />
-            </RequireAuth>
-          }
-        />
-
-        {/* 404 -> login (ou dashboard se preferir) */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+  <Route path="/devices" element={<DeviceList />} />
+  <Route path="/devices/new" element={<DeviceForm />} />
+  <Route path="/devices/:id" element={<DeviceDetails />} />
+  <Route path="/devices/:id/edit" element={<DeviceForm />} />
+        <Route path="/landing-page" element={<LandingPage />} />
+        <Route path="/dashboard" element={<DashBoard />} />
+        <Route path="/ai-assistant" element={<AiAssistant />} />
       </Routes>
     </BrowserRouter>
   );
