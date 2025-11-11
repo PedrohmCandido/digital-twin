@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { login } from "../../services/auth.js";
-import { User, Mail, LockKeyhole, EyeClosed, Eye } from "lucide-react";
+import { login } from "../../../services/auth.js";
+import { User, Mail, LockKeyhole, Eye, EyeOff } from "lucide-react";
 
 export default function Form_login() {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export default function Form_login() {
   };
 
   return (
-    <div className="border borderred-500">
+    <div className="w-full max-w-md border border-black/10 p-8 shadow-2xl rounded-2xl bg-white">
       <div className="mx-auto grid size-20 place-items-center rounded-full border-4 border-[#6CB7BD]/40">
         <User size={28} color="#6CB7BD" />
       </div>
@@ -97,7 +97,7 @@ export default function Form_login() {
               className="absolute right-2 inset-y-0 my-1.5 px-3 rounded-lg text-xs font-semibold bg-[#6CB7BD]/20 text-[#357066] hover:bg-[#6CB7BD]/30 focus:outline-none focus:ring-2 focus:ring-[#34D1B7]"
               aria-pressed={showPassword}
             >
-              {showPassword ? <EyeOpened /> : <EyeClosed />}
+              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
         </div>
