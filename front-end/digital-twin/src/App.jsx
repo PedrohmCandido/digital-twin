@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import LoginPage from "./pages/LoginPage/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
-import LandingPage from "./pages/LandingPage/LandingPage.tsx";
+import LandingPage from "./pages/LandingPage/LandingPage.jsx";
 import DashBoard from "./pages/DashBoard/DashBoard.tsx";
 import AiAssistant from "./pages/AiAssistant/AiAssistant.jsx";
 
