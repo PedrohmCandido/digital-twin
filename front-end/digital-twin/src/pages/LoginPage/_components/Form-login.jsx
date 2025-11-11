@@ -102,22 +102,6 @@ export default function Form_login() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between text-sm">
-          <label className="inline-flex items-center gap-2 select-none text-[#324158]">
-            <input
-              type="checkbox"
-              className="h-4 w-4 rounded border-[#6CB7BD] text-[#34D1B7] focus:ring-[#34D1B7]"
-            />
-            Remember me
-          </label>
-          <Link
-            to="/forgot-password"
-            className="font-semibold text-[#75A7BD] hover:underline"
-          >
-            Forgot Password
-          </Link>
-        </div>
-
         <button
           type="submit"
           disabled={isSubmitting}
