@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import { register } from "../../../services/auth.js";
-// import { createPatient } from "../../../services/patient.js";
+import { register } from "../../../services/auth.js";
+import { createPatient } from "../../../services/patient.js";
 import {
   Eye,
   EyeOff,
@@ -23,11 +23,12 @@ export default function Form_register() {
     confirm: "",
     name: "",
     phone: "",
-    adress: "",
+    address: "",
     gender: "",
-    birth: "",
+    birthdate: "",
     illnesses: "",
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -49,19 +50,27 @@ export default function Form_register() {
 
     try {
       setIsSubmitting(true);
+
       const user = await register({
-        username: formData.username,
+        name: formData.username,
         email: formData.email,
         password: formData.password,
       });
+
       await createPatient({
+        fk_user: user.id,
         name: formData.name,
+        email: formData.email,
         phone: formData.phone,
-        adress: formData.adress,
+        address: formData.address,
         gender: formData.gender,
-        birth: formData.birth,
-        illnesses: formData.illnesses,
+        birthdate: formData.birthdate,
+        illnesses: formData.illnesses
+          ? formData.illnesses.split(",").map((item) => item.trim())
+          : [],
       });
+
+      localStorage.setItem("user", JSON.stringify(user));
       navigate("/landing-page");
     } catch (err) {
       setErrorMsg(err?.message || "Erro ao cadastrar. Tente novamente.");
@@ -89,6 +98,7 @@ export default function Form_register() {
               Dados pessoais
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Nome completo */}
               <div className="space-y-1">
                 <label htmlFor="name" className="text-sm font-medium">
                   Nome completo
@@ -102,7 +112,6 @@ export default function Form_register() {
                     id="name"
                     name="name"
                     type="text"
-                    autoComplete="name"
                     placeholder="Seu nome"
                     value={formData.name}
                     onChange={handleChange}
@@ -111,6 +120,7 @@ export default function Form_register() {
                 </div>
               </div>
 
+              {/* Telefone */}
               <div className="space-y-1">
                 <label htmlFor="phone" className="text-sm font-medium">
                   Telefone
@@ -124,8 +134,6 @@ export default function Form_register() {
                     id="phone"
                     name="phone"
                     type="tel"
-                    inputMode="tel"
-                    autoComplete="tel"
                     placeholder="(00) 00000-0000"
                     value={formData.phone}
                     onChange={handleChange}
@@ -134,8 +142,9 @@ export default function Form_register() {
                 </div>
               </div>
 
+              {/* Data de nascimento */}
               <div className="space-y-1">
-                <label htmlFor="birth" className="text-sm font-medium">
+                <label htmlFor="birthdate" className="text-sm font-medium">
                   Data de nascimento
                 </label>
                 <div className="relative">
@@ -144,28 +153,28 @@ export default function Form_register() {
                     size={18}
                   />
                   <input
-                    id="birth"
-                    name="birth"
+                    id="birthdate"
+                    name="birthdate"
                     type="date"
-                    value={formData.birth}
+                    value={formData.birthdate}
                     onChange={handleChange}
                     className="w-full rounded-xl border bg-background px-10 py-2 outline-none focus:ring-4 focus:ring-primary/30"
                   />
                 </div>
               </div>
 
+              {/* Gênero */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Gênero</label>
                 <div className="grid grid-cols-3 gap-2">
                   {["Masculino", "Feminino", "Outro"].map((opt) => (
                     <label
                       key={opt}
-                      className={`cursor-pointer rounded-xl border px-3 py-2 text-sm text-center transition
-                        ${
-                          formData.gender === opt
-                            ? "border-primary ring-2 ring-primary/30"
-                            : "hover:border-muted-foreground/30"
-                        }`}
+                      className={`cursor-pointer rounded-xl border px-3 py-2 text-sm text-center transition ${
+                        formData.gender === opt
+                          ? "border-primary ring-2 ring-primary/30"
+                          : "hover:border-muted-foreground/30"
+                      }`}
                     >
                       <input
                         type="radio"
@@ -181,28 +190,26 @@ export default function Form_register() {
                 </div>
               </div>
 
+              {/* Endereço */}
               <div className="space-y-1 md:col-span-2">
-                <label htmlFor="adress" className="text-sm font-medium">
+                <label htmlFor="address" className="text-sm font-medium">
                   Endereço
                 </label>
                 <div className="relative">
                   <Home className="absolute left-3 top-3" size={18} />
                   <input
-                    id="adress"
-                    name="adress"
+                    id="address"
+                    name="address"
                     type="text"
-                    autoComplete="street-address"
                     placeholder="Rua, número, bairro, cidade"
-                    value={formData.adress}
+                    value={formData.address}
                     onChange={handleChange}
                     className="w-full rounded-xl border bg-background pl-10 pr-3 py-2 outline-none focus:ring-4 focus:ring-primary/30"
                   />
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Dica: incluir CEP ajuda no preenchimento automático depois.
-                </p>
               </div>
 
+              {/* Doenças */}
               <div className="space-y-1 md:col-span-2">
                 <label htmlFor="illnesses" className="text-sm font-medium">
                   Possui alguma doença?{" "}
@@ -211,7 +218,7 @@ export default function Form_register() {
                 <textarea
                   id="illnesses"
                   name="illnesses"
-                  placeholder="Descreva alergias, condições ou medicações relevantes"
+                  placeholder="Separe por vírgulas (ex: diabetes, asma)"
                   value={formData.illnesses}
                   onChange={handleChange}
                   className="w-full min-h-24 resize-y rounded-xl border bg-background px-3 py-2 outline-none focus:ring-4 focus:ring-primary/30"
@@ -222,11 +229,13 @@ export default function Form_register() {
 
           <hr className="border-muted/30" />
 
+          {/* --- Conta de acesso --- */}
           <section>
             <h2 className="text-sm font-semibold tracking-wide uppercase text-muted-foreground mb-4">
               Conta de acesso
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Usuário */}
               <div className="space-y-1">
                 <label htmlFor="username" className="text-sm font-medium">
                   Usuário
@@ -240,18 +249,15 @@ export default function Form_register() {
                     id="username"
                     name="username"
                     type="text"
-                    autoComplete="username"
                     placeholder="Seu usuário"
                     value={formData.username}
                     onChange={handleChange}
                     className="w-full rounded-xl border bg-background px-10 py-2 outline-none focus:ring-4 focus:ring-primary/30"
                   />
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Dica: use 4–20 caracteres, sem espaços.
-                </p>
               </div>
 
+              {/* Email */}
               <div className="space-y-1">
                 <label htmlFor="email" className="text-sm font-medium">
                   Email
@@ -265,7 +271,6 @@ export default function Form_register() {
                     id="email"
                     name="email"
                     type="email"
-                    autoComplete="email"
                     placeholder="voce@exemplo.com"
                     value={formData.email}
                     onChange={handleChange}
@@ -274,6 +279,7 @@ export default function Form_register() {
                 </div>
               </div>
 
+              {/* Senha */}
               <div className="space-y-1">
                 <label htmlFor="password" className="text-sm font-medium">
                   Senha
@@ -287,7 +293,6 @@ export default function Form_register() {
                     id="password"
                     name="password"
                     type={showPassword ? "text" : "password"}
-                    autoComplete="new-password"
                     placeholder="Mínimo 6 caracteres"
                     value={formData.password}
                     onChange={handleChange}
@@ -297,18 +302,13 @@ export default function Form_register() {
                     type="button"
                     onClick={() => setShowPassword((s) => !s)}
                     className="absolute right-3 top-1/2 -translate-y-1/2"
-                    aria-label={
-                      showPassword ? "Ocultar senha" : "Mostrar senha"
-                    }
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Recomendado: combine letras, números e símbolos.
-                </p>
               </div>
 
+              {/* Confirmar senha */}
               <div className="space-y-1">
                 <label htmlFor="confirm" className="text-sm font-medium">
                   Confirmar senha
@@ -322,7 +322,6 @@ export default function Form_register() {
                     id="confirm"
                     name="confirm"
                     type={showPassword ? "text" : "password"}
-                    autoComplete="new-password"
                     placeholder="Repita a senha"
                     value={formData.confirm}
                     onChange={handleChange}

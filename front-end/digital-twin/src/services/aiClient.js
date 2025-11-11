@@ -5,6 +5,6 @@ export async function aiChat({ messages, system }) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ messages, system }),
   });
-  if (!res.ok) throw new Error('AI API error');
+  if (!res.ok) throw new Error('API error');
   return res.json();
 }

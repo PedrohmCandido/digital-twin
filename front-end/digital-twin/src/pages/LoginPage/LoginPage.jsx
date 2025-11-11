@@ -11,8 +11,8 @@ import {
 import { Card, CardContent } from "@/../components/ui/card.js";
 
 import img1 from "@/assets/wallpepar.jpg";
-import img2 from "@/assets/wallpepar.jpg";
-import img3 from "@/assets/wallpepar.jpg";
+import img2 from "@/assets/heart.jpg";
+import img3 from "@/assets/relogio.jpg";
 
 export default function LoginPage() {
   const slides = [img1, img2, img3];

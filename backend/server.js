@@ -24,7 +24,7 @@ app.get("/", (req, res) => res.send("API is running..."));
 
 // Swagger Docs
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-''
+
 // Rotas
 app.use("/auth", auth)
 app.use("/patients", patientsRouter);
