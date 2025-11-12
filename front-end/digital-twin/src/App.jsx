@@ -127,7 +127,11 @@ export default function App() {
 
         <Route
           path="/tech-sheet"
-          element={<TechSheet />}
+          element={
+            <RequireAuth>
+              <TechSheet />
+            </RequireAuth>
+          }
         />
 
         {/* 404 -> login (ou dashboard se preferir) */}
