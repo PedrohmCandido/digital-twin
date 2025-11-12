@@ -4,7 +4,7 @@ export async function register({ name, email, password }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
     });
-    if (!res.ok) throw new Error('AI API error');
+    if (!res.ok) throw new Error('API error');
     return res.json();
 }
 
@@ -15,6 +15,6 @@ export async function login({ email, password }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
     });
-    if (!res.ok) throw new Error('AI API error');
+    if (!res.ok) throw new Error('API error');
     return res.json();
 }

@@ -18,6 +18,7 @@ const seed = async () => {
       Patient.deleteMany(),
       Device.deleteMany(),
       FollowUp.deleteMany(),
+      User.deleteMany()
     ]);
     console.log("🧹 Coleções limpas");
 
