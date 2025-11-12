@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Base neutra (clara) */
+    --background: 210 20% 99%;
+    --foreground: 216 28% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 216 28% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 216 28% 15%;
+
+    /* Primária = 1) Azul escuro #324158 */
+    /* Hex #324158 -> HSL ≈ 216 28% 27% */
+    --primary: 216 28% 27%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secundária = 2) Azul médio #75A7BD */
+    /* Hex #75A7BD -> HSL ≈ 198 35% 60% */
+    --secondary: 198 35% 60%;
+    --secondary-foreground: 210 20% 12%;
+
+    /* Acento = 3) Azul turquesa #6CB7BD */
+    /* Hex #6CB7BD -> HSL ≈ 184 38% 58% */
+    --accent: 184 38% 58%;
+    --accent-foreground: 210 20% 12%;
+
+    /* Suporte: 4) Verde petróleo #357066 | 5) Verde água #34D1B7 */
+    /* #357066 -> HSL ≈ 170 36% 32%  |  #34D1B7 -> HSL ≈ 170 63% 51% */
+    --success: 170 63% 51%;
+    --success-foreground: 0 0% 100%;
+
+    /* Contornos e elementos suaves puxando do Azul médio */
+    --muted: 210 16% 95%;
+    --muted-foreground: 216 15% 35%;
+
+    --border: 198 35% 78%;
+    --input: 198 35% 78%;
+    /* Realce de foco com verde-água (5) */
+    --ring: 170 63% 51%;
+
+    /* Opcional: tokens específicos do Sidebar do shadcn/ui */
+    --sidebar-background: 216 28% 10%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 216 28% 27%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 184 38% 58%;
+    --sidebar-accent-foreground: 210 20% 12%;
+    --sidebar-border: 216 28% 18%;
+    --sidebar-ring: 170 63% 51%;
+  }
+
+  .dark {
+    /* Tema escuro: eleva Azul escuro e Verde petróleo */
+    --background: 216 28% 10%;
+    --foreground: 0 0% 100%;
+
+    --card: 216 28% 12%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 216 28% 12%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 170 36% 32%; /* usa Verde petróleo como primária no dark */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 216 28% 27%; /* Azul escuro vira secondary no dark */
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 184 38% 45%; /* Azul turquesa um pouco mais escuro */
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 216 28% 16%;
+    --muted-foreground: 0 0% 92%;
+
+    --border: 216 28% 22%;
+    --input: 216 28% 22%;
+    --ring: 170 63% 51%;
+
+    --sidebar-background: 216 28% 8%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 170 36% 32%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 184 38% 45%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 216 28% 14%;
+    --sidebar-ring: 170 63% 51%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

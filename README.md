@@ -29,250 +29,102 @@ A arquitetura do projeto foi pensada para ser modular e escalável, utilizando a
 O projeto adota uma arquitetura de aplicação **distribuída**, separando o **serviço (Backend)** da **interface (Frontend)**. Essa separação permite que cada parte seja desenvolvida, implantada e escalada de forma independente. O Frontend se comunica com o Backend através de chamadas **RESTful API** para cadastro de usuários e envio/recebimento dos dados de saúde para análise.
 
 
-# BACKEND (FORK KAIKI)
+# Front-end (Fork do Pedro) — Digital Twin em Saúde
 
-# 🏥 Medical API - Sistema de Gerenciamento de Pacientes e Dispositivos
+> Este repositório é o **fork do Pedro** dentro do projeto em grupo de Digital Twin para Saúde. Aqui está a implementação e documentação do **front-end** que comporá a aplicação final, com foco em autenticação, navegação e primeiras telas para visualização de métricas clínicas (glicemia, IMC, batimentos cardíacos, etc.).
 
-Este projeto é uma **API RESTful** desenvolvida com **Node.js** e **Express**, com o objetivo de gerenciar **pacientes**, **dispositivos médicos**, **sinais vitais** e **simulações**.  
-Toda a documentação da API é feita com **Swagger**, permitindo fácil exploração e teste das rotas.
+## 🎯 Objetivo deste código-fonte
 
-O objetivo desse projeto é que seja o backend do projeto Digital-Twin que está sendo desenvolvido.
+Implementar a **base do front-end** do Digital Twin, cobrindo:
 
----
+- **Bootstrapping** do projeto com **Vite + React + TypeScript**.
+- Definição do **esquema de rotas** usando **React Router**.
+- Criação das páginas:
+  - `LoginPage.tsx`
+  - `RegisterPage.tsx`
+  - `LandingPage.tsx`
+  - `Dashboard.tsx`
 
-## 🚀 Tecnologias Utilizadas
-
-- **Node.js** – Ambiente de execução JavaScript.
-- **Express.js** – Framework para criação de APIs RESTful.
-- **Swagger UI Express** – Documentação interativa das rotas.
-
----
-
-## 🧩 Estrutura de Pastas
-📦 projeto-medical-api 
-
-├── 📁 controllers
-
-│ ├── patientController.js
-
-│ ├── deviceController.js
-
-│ ├── vitalController.js
-
-│ └── simulationController.js
-
-│
-
-├── 📁 models
-
-│ ├── patientModel.js
-
-│ ├── deviceModel.js
-
-│ ├── vitalModel.js
-
-│ └── simulationModel.js
-
-│
-
-├── 📁 routes
-
-│ ├── patientRoutes.js
-
-│ ├── deviceRoutes.js
-
-│ ├── vitalRoutes.js
-
-│ └── simulationRoutes.js
-
-│
-
-├── 📁 config
-
-│ └── swagger.js
-
-│
-
-├── index.js
-
-├── server.js
-
-└── package.json
+Este módulo será integrado ao projeto final como a **interface web** para autenticação de usuários e visualização das métricas do gêmeo digital.
 
 
----
+## 🧩 Tecnologias e decisões
 
-## ⚙️ Configuração do Projeto
+- **Vite** para build/dev server rápidos (React + TypeScript).
+- **React Router** para navegação declarativa.
+- Organização por **páginas/serviços/hooks** favorecendo coesão e testabilidade.
+- (Opcional/no futuro) Biblioteca de UI e client HTTP (ex.: fetch nativo).
 
-### Instalar dependências
+## 🗂️ Estrutura do projeto
+
+
+
+## 🧭 Rotas e navegação
+
+- `/landing-page` → **LandingPage** (apresentação).
+- `/login` → **LoginPage** (autenticação do usuário).
+- `/register` → **RegisterPage** (criação de conta).
+- `/dashboard` → **Dashboard** (métricas do Digital Twin; rota protegida).
+
+```tsx
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/landing-page" element={<LandingPage />} />
+        <Route path="/dashboard" element={<DashBoard />} />
+      </Routes>
+    </Router>
+  )
+}
+```
+
+## 🧱 Páginas implementadas
+
+- **LandingPage.tsx** — Introduz o conceito de Digital Twin em Saúde;
+- **LoginPage.tsx** — Formulário de autenticação; 
+- **RegisterPage.tsx** — Criação de usuário;  
+- **Dashboard.tsx** — Exibe **métricas mais recentes** (glicemia, IMC, batimentos);
+
+## ⚙️ Configuração & execução
+
+### Pré-requisitos
+- Node.js LTS (≥ 18 recomendado)
+
+### Instalação e scripts
 
 ```bash
-npm install express swagger-ui-express nodemon
-```
+# instalar dependências
+npm install
 
-
-### Rodar o servidor
-```
+# ambiente de desenvolvimento
 npm run dev
 
-"scripts": {
-  "dev": "node server.js"
-}
+# build para produção
+npm run build
 
+# preview do build
+npm run preview
 ```
 
-📜 Estrutura dos Arquivos
-🔹 server.js
-```
-Responsável por inicializar o servidor e configurar o Swagger.
-import express from "express";
-import swaggerUi from "swagger-ui-express";
-import swaggerDocs from "./config/swagger.js";
+## 🚧 Próximos passos
 
-import patientRoutes from "./routes/patientRoutes.js";
-import deviceRoutes from "./routes/deviceRoutes.js";
-import vitalRoutes from "./routes/vitalRoutes.js";
-import simulationRoutes from "./routes/simulationRoutes.js";
+1. Integrar processo de criação de usuário
+2. integrar processo de autenticação do usuário
+3. integrar com um banco de dados real.
 
-const app = express();
-app.use(express.json());
+## 🤝 Contribuição neste fork
 
-// Rotas principais
-app.use("/patients", patientRoutes);
-app.use("/devices", deviceRoutes);
-app.use("/vitals", vitalRoutes);
-app.use("/simulations", simulationRoutes);
-```
+- Este fork concentra o **escopo de front-end**.
+- Criação da arquitetura de páginas e o que cada uma deve conter
 
-// Documentação Swagger
-```
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+## 🧾 Licença
 
-const PORT = 3000;
-app.listen(PORT, () => console.log(`🚀 Servidor rodando na porta ${PORT}`));
-```
+Herdada do repositório central da organização.
 
-🧠 Conceito: MVC (Model-View-Controller)
+---
 
-O projeto segue uma arquitetura MVC simplificada, separando responsabilidades:
-
-Models → Estrutura de dados (como um "mini banco").
-
-Controllers → Regras de negócio e manipulação de dados.
-
-Routes → Endpoints da API e integração com Swagger.
-
-🩺 Exemplo: Patient Routes
-
-As rotas de pacientes (/patients) permitem:|  Método  | Rota            | Descrição                |
-| :------: | :-------------- | :----------------------- |
-|   `GET`  | `/patients`     | Lista todos os pacientes |
-|  `POST`  | `/patients`     | Cria um novo paciente    |
-|   `PUT`  | `/patients/:id` | Atualiza um paciente     |
-| `DELETE` | `/patients/:id` | Remove um paciente       |
-
-
-Exemplo de Schema (Swagger)
-```
-components:
-  schemas:
-    Patient:
-      type: object
-      required:
-        - name
-        - age
-      properties:
-        id:
-          type: integer
-          description: ID do paciente
-        name:
-          type: string
-          description: Nome do paciente
-        age:
-          type: integer
-          description: Idade do paciente
-
-```
-🧩 Outros Recursos
-
-O mesmo padrão de CRUD foi aplicado às entidades:
-| Entidade          | Arquivo                                           | Descrição                         |
-| :---------------- | :------------------------------------------------ | :-------------------------------- |
-| **Pacientes**     | `patientController.js` / `patientRoutes.js`       | Gerencia pacientes                |
-| **Dispositivos**  | `deviceController.js` / `deviceRoutes.js`         | Gerencia dispositivos médicos     |
-| **Sinais Vitais** | `vitalController.js` / `vitalRoutes.js`           | Gerencia medições de saúde        |
-| **Simulações**    | `simulationController.js` / `simulationRoutes.js` | Gera dados de simulações clínicas |
-
-
-🧭 Documentação Swagger
-
-Após iniciar o servidor, acesse:
-```
-👉 http://localhost:3000/api-docs
-```
-Lá você pode visualizar todas as rotas com descrições, parâmetros e exemplos de respostas.
-
-
-💾 Models
-
-Os models funcionam como simulações de tabelas de banco de dados, contendo dados e estrutura de cada entidade.
-
-Exemplo (models/patientModel.js):
-```
-
-export const patients = [
-  { id: 1, name: "João Silva", age: 32 },
-  { id: 2, name: "Maria Souza", age: 28 },
-];
-
-```
-
-🔄 Controllers
-
-Os controllers contêm a lógica das operações CRUD.
-
-Exemplo (controllers/patientController.js):
-```
-import { patients } from "../models/patientModel.js";
-
-export const getAllPatients = (req, res) => res.json(patients);
-
-export const createPatient = (req, res) => {
-  const newPatient = { id: patients.length + 1, ...req.body };
-  patients.push(newPatient);
-  res.status(201).json(newPatient);
-};
-```
-
-🧰 Rotas (Routers)
-
-As routes conectam o Express às funções do controller.
-
-Exemplo (routes/patientRoutes.js):
-```
-import express from "express";
-import {
-  getAllPatients,
-  createPatient,
-  updatePatient,
-  deletePatient,
-} from "../controllers/patientController.js";
-
-const router = express.Router();
-
-router.get("/", getAllPatients);
-router.post("/", createPatient);
-router.put("/:id", updatePatient);
-router.delete("/:id", deletePatient);
-
-export default router;
-
-```
-
-
-## Licença
-Todo esse trbalho está sendo construido com baso no repositório da organizaççao
-
-
-
-
+**Resumo:** este fork entrega a **base funcional do front-end** (Vite + React + TS + React Router) com as páginas essenciais e exibição inicial de métricas (glicemia, IMC, batimentos).
