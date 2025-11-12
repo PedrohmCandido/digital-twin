@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
 import LandingPage from "./pages/LandingPage/LandingPage.jsx";
-import DashBoard from "./pages/DashBoard/DashBoard.tsx";
+import DashBoard from "./pages/DashBoard/DashBoard.jsx";
 import AiAssistant from "./pages/AiAssistant/AiAssistant.jsx";
 import DeviceList from "./pages/Devices/DeviceList.jsx";
 import DeviceForm from "./pages/Devices/DeviceForm.jsx";
@@ -41,7 +41,7 @@ export default function App() {
           path="/"
           element={
             user ? (
-              <Navigate to="/dashboard" replace />
+              <Navigate to="/login" replace />
             ) : (
               <Navigate to="/login" replace />
             )
