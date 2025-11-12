@@ -6,6 +6,10 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
 import LandingPage from "./pages/LandingPage/LandingPage.jsx";
 import DashBoard from "./pages/DashBoard/DashBoard.tsx";
 import AiAssistant from "./pages/AiAssistant/AiAssistant.jsx";
+import DeviceList from "./pages/Devices/DeviceList.jsx";
+import DeviceForm from "./pages/Devices/DeviceForm.jsx";
+import DeviceDetails from "./pages/Devices/DeviceDetails.jsx";
+import TechSheet from "./pages/TechSheet/TechSheet.jsx";
 
 function safeGetUser() {
   try {
@@ -86,6 +90,44 @@ export default function App() {
               <AiAssistant />
             </RequireAuth>
           }
+        />
+
+        <Route
+          path="/devices"
+          element={
+            <RequireAuth>
+              <DeviceList />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/devices/new"
+          element={
+            <RequireAuth>
+              <DeviceForm />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/devices/:id"
+          element={
+            <RequireAuth>
+              <DeviceDetails />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/devices/:id/edit"
+          element={
+            <RequireAuth>
+              <DeviceForm />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/tech-sheet"
+          element={<TechSheet />}
         />
 
         {/* 404 -> login (ou dashboard se preferir) */}
