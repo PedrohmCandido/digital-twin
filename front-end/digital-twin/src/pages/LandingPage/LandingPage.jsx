@@ -17,9 +17,22 @@ function safeGetUser() {
   }
 }
 
+function getDisplayName(user) {
+  if (!user) return "";
+  return (
+    user.name ||
+    user.username ||
+    user.fullName ||
+    user.displayName ||
+    (user.email ? user.email.split("@")[0] : "")
+  );
+}
+
 export default function LandingPage() {
   const navigate = useNavigate();
   const user = safeGetUser();
+  const displayName = getDisplayName(user);
+  const displayEmail = user?.email || "";
 
   function handleLogout() {
     localStorage.removeItem("user");
@@ -38,11 +51,11 @@ export default function LandingPage() {
                 <SidebarTrigger />
                 <div>
                   <h1 className="text-xl font-semibold">
-                    Bem-vindo{user?.name ? `, ${user.name}` : ""}!
+                    Bem-vindo{displayName ? `, ${displayName}` : ""}!
                   </h1>
-                  {user?.email && (
+                  {displayEmail && (
                     <p className="text-sm text-muted-foreground">
-                      {user.email}
+                      {displayEmail}
                     </p>
                   )}
                 </div>
