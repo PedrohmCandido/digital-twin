@@ -19,6 +19,7 @@ const items = [
   { title: "Calendário", url: "/calendar", icon: Calendar },
   { title: "Pesquisar", url: "/search", icon: Search },
   { title: "Configurações", url: "/settings", icon: Settings },
+  { title: "Dispositivos", url: "/devices", icon: Inbox },
 ];
 
 export default function AppSidebar({ onLogout }) {

@@ -82,7 +82,10 @@ const recomendacao = getRecomendacao();
             <h1>Painel de Acompanhamento de Saúde</h1>
             <p> Métricas vitais para o seu acompanhamento e prevenção de riscos.</p>
         </header>
-        <button className='btn-return' onClick={handleLp}>Voltar para Página Inicial</button>
+                <div className="flex items-center gap-3">
+                    <button className='btn-return' onClick={handleLp}>Voltar para Página Inicial</button>
+                    <button className='btn-return' onClick={() => navigate('/devices')}>Ir para Dispositivos</button>
+                </div>
 
         <section className={`recomendacao ${getRiskClassName(recomendacao.tipo)}`}>
             <h2>{recomendacao.titulo}</h2>

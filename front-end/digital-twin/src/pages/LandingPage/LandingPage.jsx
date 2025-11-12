@@ -128,6 +128,12 @@ export default function LandingPage() {
                       Dashboard
                     </Link>
                     <Link
+                      to="/devices"
+                      className="rounded-lg border px-2.5 py-1 text-sm hover:bg-accent"
+                    >
+                      Dispositivos
+                    </Link>
+                    <Link
                       to="/ai-assistant"
                       className="rounded-lg border px-2.5 py-1 text-sm hover:bg-accent"
                     >
