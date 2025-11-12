@@ -3,6 +3,23 @@ import { useState } from "react";
 import { login } from "../../../services/auth.js";
 import { User, Mail, LockKeyhole, Eye, EyeOff } from "lucide-react";
 
+function normalizeUser(raw) {
+  // Muitas APIs retornam em shapes diferentes: raw, raw.user, raw.data.user...
+  const u = raw?.user ?? raw?.data?.user ?? raw?.data ?? raw ?? {};
+  const email = u.email ?? "";
+  const name =
+    u.name ||
+    u.username ||
+    u.fullName ||
+    u.displayName ||
+    (email ? email.split("@")[0] : "");
+  return {
+    id: u.id ?? u.userId ?? null,
+    name,
+    email,
+  };
+}
+
 export default function Form_login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -21,14 +38,17 @@ export default function Form_login() {
     setIsSubmitting(true);
     setErrorMsg("");
     try {
-      const user = await login(formData);
-      if (!user) {
+      const resp = await login(formData);
+      if (!resp) {
         setErrorMsg("Usuário ou senha inválidos.");
         setIsSubmitting(false);
         return;
       }
-      localStorage.setItem("user", JSON.stringify(user));
-      navigate("/landing-page");
+
+      const toStore = normalizeUser(resp);
+      localStorage.setItem("user", JSON.stringify(toStore));
+
+      navigate("/landing-page", { replace: true });
     } catch {
       setErrorMsg("Erro ao fazer login. Tente novamente.");
       setIsSubmitting(false);
