@@ -10,6 +10,7 @@ import DeviceList from "./pages/Devices/DeviceList.jsx";
 import DeviceForm from "./pages/Devices/DeviceForm.jsx";
 import DeviceDetails from "./pages/Devices/DeviceDetails.jsx";
 import TechSheet from "./pages/TechSheet/TechSheet.jsx";
+import Settings from "./pages/settings/config.jsx";
 
 function safeGetUser() {
   try {
@@ -130,6 +131,14 @@ export default function App() {
           element={
             <RequireAuth>
               <TechSheet />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <RequireAuth>
+              <Settings />
             </RequireAuth>
           }
         />
