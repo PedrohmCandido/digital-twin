@@ -34,6 +34,12 @@ export default function DashBoard() {
                 >
                   Assistente de IA
                 </Link>
+                <Link
+                  to="/tech-sheet"
+                  className="rounded-lg border px-3 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
+                >
+                  Ficha Técnica
+                </Link>
 
                 <button
                   onClick={handleLogout}
