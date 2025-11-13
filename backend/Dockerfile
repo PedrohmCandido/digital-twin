@@ -4,7 +4,8 @@ FROM node:24-alpine
 WORKDIR /digital-twin
 
 # copiar package.json e lockfile primeiro (melhor para cache)
-COPY package.json pnpm-lock.yaml ./
+# usar package-lock.json (pnpm-lock.yaml não existe neste repo)
+COPY package.json package-lock.json ./
 
 # instalar dependências
 RUN npm install
