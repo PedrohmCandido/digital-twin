@@ -35,7 +35,9 @@ function avg(nums) {
 
 export default function ChartsFollowUp() {
   const [dados, setDados] = useState([]);
-  const [currentUserId, setCurrentUserId] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(
+    "691555099058ad63ab0e6516"
+  );
   const [selectedDeviceId, setSelectedDeviceId] = useState("all");
 
   useEffect(() => {
@@ -75,7 +77,6 @@ export default function ChartsFollowUp() {
       if (!map.has(id)) map.set(id, label);
     }
     return Array.from(map.entries()).map(([id, label]) => ({ id, label }));
-
   }, [dados]);
 
   const {
