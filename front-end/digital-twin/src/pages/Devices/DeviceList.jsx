@@ -22,17 +22,49 @@ export default function DeviceList() {
     try {
       setLoading(true)
       const data = await deviceService.getAllDevices()
-      // filtrar apenas dispositivos do usuário logado
+
+      // tentativa de encontrar o patient correspondente ao usuário logado
       const sessionUser = safeGetUser()
+      let patientId = null
       if (sessionUser) {
-        const uid = sessionUser._id || sessionUser.id || sessionUser._userid || ''
+        const BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000'
+        const userId = sessionUser._id || sessionUser.id || sessionUser.userId || null
+        try {
+          if (userId) {
+            const res = await fetch(`${BASE}/patients/${userId}`)
+            if (res.ok) {
+              const p = await res.json()
+              patientId = p._id || p.id || null
+            }
+          }
+        } catch (err) {
+          console.warn('patient id lookup failed, will fallback to list match', err)
+        }
+
+        if (!patientId) {
+          try {
+            const BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000'
+            const res = await fetch(`${BASE}/patients`)
+            if (res.ok) {
+              const list = await res.json()
+              const found = list.find(p => (sessionUser.email && p.email === sessionUser.email) || (sessionUser.name && (p.name === sessionUser.name || p.name === sessionUser.fullname)))
+              if (found) patientId = found._id || found.id || null
+            }
+          } catch (err) {
+            console.warn('patient list lookup failed', err)
+          }
+        }
+      }
+
+      if (patientId) {
         const filtered = data.filter((d) => {
           if (!d.fk_usuario) return false
           const fk = typeof d.fk_usuario === 'object' ? (d.fk_usuario._id || d.fk_usuario.toString()) : d.fk_usuario
-          return String(fk) === String(uid)
+          return String(fk) === String(patientId)
         })
         setDevices(filtered)
       } else {
+        // sem patient correspondente — não mostrar dispositivos
         setDevices([])
       }
     } catch (err) {

@@ -18,11 +18,49 @@ export default function DeviceForm() {
   const [device, setDevice] = useState({ nome_dispositivo: '', tipo_dispositivo: '', status: 'ativo', fk_usuario: '' })
 
   useEffect(() => {
-    // Preencher fk_usuario com o usuário logado (cada dispositivo pertence ao usuário que o criou)
-    const sessionUser = safeGetUser()
-    if (sessionUser && !id) {
-      setDevice((d) => ({ ...d, fk_usuario: sessionUser._id || sessionUser.id || '' }))
-    }
+    // Preencher fk_usuario com o paciente correspondente ao usuário logado
+    (async () => {
+      const sessionUser = safeGetUser()
+      if (!sessionUser || id) return
+
+      const BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000'
+      let patientId = null
+
+      // first try direct patient id lookup by user id
+      const userId = sessionUser._id || sessionUser.id || sessionUser.userId || null
+      if (userId) {
+        try {
+          const res = await fetch(`${BASE}/patients/${userId}`)
+          if (res.ok) {
+            const p = await res.json()
+            patientId = p._id || p.id || null
+          }
+        } catch (err) {
+          console.warn('patient id lookup failed', err)
+        }
+      }
+
+      // fallback: fetch patients list and match by email/name
+      if (!patientId) {
+        try {
+          const res = await fetch(`${BASE}/patients`)
+          if (res.ok) {
+            const list = await res.json()
+            const found = list.find(p => (sessionUser.email && p.email === sessionUser.email) || (sessionUser.name && (p.name === sessionUser.name || p.name === sessionUser.fullname)))
+            if (found) patientId = found._id || found.id || null
+          }
+        } catch (err) {
+          console.warn('patient list lookup failed', err)
+        }
+      }
+
+      if (patientId) {
+        setDevice((d) => ({ ...d, fk_usuario: patientId }))
+      } else {
+        // leave fk_usuario empty; save button will be disabled
+        console.warn('No patient id found for logged user; device creation will be blocked until a patient exists')
+      }
+    })()
 
     if (id) {
       // backend não tem GET /devices/:id, então buscamos todos e filtramos

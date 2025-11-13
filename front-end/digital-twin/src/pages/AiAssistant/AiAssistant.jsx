@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { aiChat } from '../../services/aiClient';
+import getFollowUp from '../../services/followUp';
 import AppSidebar from "../../pages/LandingPage/_components/Sidebar.jsx";
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar.js';
 import { Link } from 'react-router-dom';
@@ -14,7 +15,6 @@ export default function AiAssistant() {
   async function handleSend(e) {
     e.preventDefault();
     if (!input.trim()) return;
-
     const userMsg = { role: 'user', content: input.trim() };
     const next = [...messages, userMsg];
     setMessages(next);
@@ -34,6 +34,43 @@ export default function AiAssistant() {
     }
   }
 
+  async function handleAnalyzeMetrics() {
+    setLoading(true);
+    try {
+      const dados = await getFollowUp();
+      const nums = (arr, key) =>
+        arr
+          .map((x) => {
+            const v = x[key];
+            return typeof v === 'number' ? v : v ? Number(v) : NaN;
+          })
+          .filter((n) => typeof n === 'number' && !Number.isNaN(n));
+
+      const avg = (a) => {
+        if (!a.length) return 0;
+        return a.reduce((s, n) => s + n, 0) / a.length;
+      };
+
+      const mediaFC = avg(nums(dados, 'frequencia_cardiaca_bpm'));
+      const mediaSpO2 = avg(nums(dados, 'oxigenacao_spo2'));
+      const mediaVFC = avg(nums(dados, 'variabilidade_fc_ms'));
+
+      const content = `Analise estas métricas do meu dashboard e forneça um diagnóstico/resumo e recomendações:\n- FC média (bpm): ${mediaFC ? mediaFC.toFixed(1) : 'N/A'}\n- SpO2 média (%): ${mediaSpO2 ? mediaSpO2.toFixed(1) : 'N/A'}\n- VFC média (ms): ${mediaVFC ? mediaVFC.toFixed(1) : 'N/A'}\n\nPor favor, explique o que esses números podem indicar e sugira próximos passos clínicos ou contextuais.`;
+
+      const userMsg = { role: 'user', content };
+      const next = [...messages, userMsg];
+      setMessages(next);
+
+      const { content: reply } = await aiChat({ messages: next });
+      setMessages([...next, { role: 'assistant', content: reply }]);
+    } catch (err) {
+      console.error('Erro ao analisar métricas', err);
+      setMessages((m) => [...m, { role: 'assistant', content: 'Não consegui analisar as métricas agora.' }]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <SidebarProvider>
       <div className="flex w-full">
@@ -48,6 +85,13 @@ export default function AiAssistant() {
               </div>
 
               <div className="flex items-center gap-2">
+                <button
+                  onClick={handleAnalyzeMetrics}
+                  disabled={loading}
+                  className="rounded-lg border px-3 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
+                >
+                  Analisar métricas
+                </button>
               </div>
             </div>
           </header>
