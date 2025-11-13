@@ -56,18 +56,35 @@ export default function TechSheet() {
 		"illnesses",
 	];
 
-		const source = patient || user || {};
-		const isPatientLike = Object.keys(source).some((k) => patientFields.includes(k));
+		// Preferir sempre os dados do paciente vindos do servidor.
+		// Não usar `user` (localStorage) como fallback para evitar exibir dados desatualizados.
+		const source = patient || {};
+		const isPatientLike = Object.keys(source).length > 0 && Object.keys(source).some((k) => patientFields.includes(k));
 
 		const entries = isPatientLike
 			? patientFields.filter((f) => source[f] !== undefined).map((k) => [k, source[k]])
-			: Object.entries(source).filter(([k]) => !["password", "token"].includes(k));
+			: [];
 
 		if (!user) {
 		return (
 			<div className="min-h-screen flex items-center justify-center p-6">
 				<div className="w-full max-w-md border border-black/10 p-6 rounded-2xl shadow-sm bg-white text-center">
 					<p className="text-gray-600">Nenhum usuário encontrado.</p>
+				</div>
+			</div>
+		);
+	}
+
+	// Caso exista sessão local (user) mas o paciente NÃO seja encontrado no backend,
+	// preferimos mostrar uma mensagem clara (evita exibir dados stale do localStorage).
+	if (user && !patient && !loading) {
+		return (
+			<div className="min-h-screen flex items-center justify-center p-6">
+				<div className="w-full max-w-md border border-black/10 p-6 rounded-2xl shadow-sm bg-white text-center">
+					<p className="text-gray-600">Paciente não encontrado no servidor. Os dados locais foram desconsiderados.</p>
+					<div className="mt-4 flex justify-center gap-2">
+						<button onClick={() => window.location.reload()} className="rounded-lg border px-3 py-1.5 text-sm">Recarregar</button>
+					</div>
 				</div>
 			</div>
 		);
