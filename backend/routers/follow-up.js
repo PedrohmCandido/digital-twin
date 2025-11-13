@@ -4,6 +4,7 @@ import {
     createAcompanhamento,
     updateAcompanhamento,
     deleteAcompanhamento,
+    getFollowUpsForLoggedUser
 } from "../controllers/follow-upController.js";
 
 const router = express.Router();
@@ -159,6 +160,7 @@ const router = express.Router();
 router.get("/", getAllAcompanhamentos);
 router.post("/", createAcompanhamento);
 router.put("/:id", updateAcompanhamento);
-router.delete("/:id", deleteAcompanhamento);
+router.delete("/:id", deleteAcompanhamento)
+router.get("/me", getFollowUpsForLoggedUser);
 
 export default router;
