@@ -2,27 +2,63 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import deviceService from '../../services/deviceService'
 
+function safeGetUser() {
+  try {
+    const raw = localStorage.getItem('user')
+    return raw ? JSON.parse(raw) : null
+  } catch {
+    return null
+  }
+}
+
 export default function DeviceForm() {
   const { id } = useParams()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [device, setDevice] = useState({ nome_dispositivo: '', tipo_dispositivo: '', status: 'ativo', fk_usuario: '' })
-  const [patients, setPatients] = useState([])
 
   useEffect(() => {
-    // carregar lista de pacientes para popular select do fk_usuario
+    // Preencher fk_usuario com o paciente correspondente ao usuário logado
     (async () => {
-      try {
-        const BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000'
-        const res = await fetch(`${BASE}/patients`)
-        if (res.ok) {
-          const list = await res.json()
-          setPatients(list)
-          // se estamos criando e não há fk definido, predefina com o primeiro paciente (se existir)
-          setDevice((d) => ({ ...d, fk_usuario: d.fk_usuario || (list[0]?._id || '') }))
+      const sessionUser = safeGetUser()
+      if (!sessionUser || id) return
+
+      const BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000'
+      let patientId = null
+
+      // first try direct patient id lookup by user id
+      const userId = sessionUser._id || sessionUser.id || sessionUser.userId || null
+      if (userId) {
+        try {
+          const res = await fetch(`${BASE}/patients/${userId}`)
+          if (res.ok) {
+            const p = await res.json()
+            patientId = p._id || p.id || null
+          }
+        } catch (err) {
+          console.warn('patient id lookup failed', err)
         }
-      } catch (err) {
-        console.error('Erro ao carregar pacientes', err)
+      }
+
+      // fallback: fetch patients list and match by email/name
+      if (!patientId) {
+        try {
+          const res = await fetch(`${BASE}/patients`)
+          if (res.ok) {
+            const list = await res.json()
+            const found = list.find(p => (sessionUser.email && p.email === sessionUser.email) || (sessionUser.name && (p.name === sessionUser.name || p.name === sessionUser.fullname)))
+            if (found) patientId = found._id || found.id || null
+          }
+        } catch (err) {
+          console.warn('patient list lookup failed', err)
+        }
+      }
+
+      if (patientId) {
+        setDevice((d) => ({ ...d, fk_usuario: patientId }))
+      } else {
+        // leave fk_usuario empty; save button will be disabled
+        console.warn('No patient id found for logged user; device creation will be blocked until a patient exists')
       }
     })()
 
@@ -106,30 +142,12 @@ export default function DeviceForm() {
               </select>
             </div>
 
-            <div>
-              <label className="block text-sm text-gray-700 mb-1">Paciente</label>
-              {patients.length === 0 ? (
-                <div className="text-sm text-red-600">Nenhum paciente encontrado. Crie um paciente antes de adicionar um dispositivo.</div>
-              ) : (
-                <select
-                  name="fk_usuario"
-                  value={device.fk_usuario || ''}
-                  onChange={handleChange}
-                  required
-                  className="w-full rounded-xl border border-[#6CB7BD] text-[#324158] py-2 px-3 focus:outline-none focus:ring-4 focus:ring-[#34D1B7]/20"
-                >
-                  <option value="">-- selecione um paciente --</option>
-                  {patients.map((p) => (
-                    <option key={p._id} value={p._id}>{p.name}</option>
-                  ))}
-                </select>
-              )}
-            </div>
+            {/* fk_usuario é preenchido automaticamente com o usuário logado; não é necessário selecionar um paciente aqui */}
 
             <div className="flex items-center gap-3 pt-3">
               <button
                 type="submit"
-                disabled={loading || patients.length === 0}
+                disabled={loading || !device.fk_usuario}
                 className="py-2 px-4 rounded-full font-semibold text-white bg-gradient-to-r from-[#34D1B7] to-[#357066] hover:from-[#357066] hover:to-[#34D1B7] disabled:opacity-70"
               >
                 {loading ? 'Salvando...' : 'Salvar'}

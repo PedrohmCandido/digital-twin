@@ -26,6 +26,8 @@ const items = [
   { title: "Dashboard", url: "/dashboard", icon: Inbox },
   { title: "Dispositivos", url: "/devices", icon: MonitorSmartphone },
   { title: "Configurações", url: "/settings", icon: Settings },
+  { title: "Assistente virtual", url: "/ai-assistant", icon: MonitorSmartphone },
+  { title: "Ficha técnica", url: "/tech-sheet", icon: Search },
 ];
 
 export default function AppSidebar({ onLogout }) {

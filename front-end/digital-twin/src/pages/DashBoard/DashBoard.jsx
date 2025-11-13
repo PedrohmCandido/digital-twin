@@ -28,19 +28,6 @@ export default function DashBoard() {
               </div>
 
               <div className="flex items-center gap-2">
-                <Link
-                  to="/ai-assistant"
-                  className="rounded-lg border px-3 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
-                >
-                  Assistente de IA
-                </Link>
-                <Link
-                  to="/tech-sheet"
-                  className="rounded-lg border px-3 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
-                >
-                  Ficha Técnica
-                </Link>
-
                 <button
                   onClick={handleLogout}
                   className="rounded-lg bg-primary px-3 py-1.5 text-sm text-primary-foreground hover:opacity-90"
