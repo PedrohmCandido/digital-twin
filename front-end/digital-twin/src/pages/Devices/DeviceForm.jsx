@@ -67,44 +67,85 @@ export default function DeviceForm() {
   }
 
   return (
-    <div>
-      <h2>{id ? 'Editar Dispositivo' : 'Novo Dispositivo'}</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nome</label>
-          <input name="nome_dispositivo" value={device.nome_dispositivo || ''} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Tipo</label>
-          <input name="tipo_dispositivo" value={device.tipo_dispositivo || ''} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Status</label>
-          <select name="status" value={device.status || 'ativo'} onChange={handleChange}>
-            <option value="ativo">ativo</option>
-            <option value="inativo">inativo</option>
-          </select>
-        </div>
-        <div>
-          <label>Paciente (fk_usuario)</label>
-          {patients.length === 0 ? (
+    <div className="min-h-screen flex items-start justify-center p-6">
+      <div className="w-full max-w-lg">
+        <div className="border border-black/10 p-6 rounded-2xl shadow-sm bg-white">
+          <h2 className="text-2xl font-semibold text-[#324158] mb-4">{id ? 'Editar Dispositivo' : 'Novo Dispositivo'}</h2>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <p>Nenhum paciente encontrado. Crie um paciente antes de adicionar um dispositivo.</p>
+              <label className="block text-sm text-gray-700 mb-1">Nome</label>
+              <input
+                name="nome_dispositivo"
+                value={device.nome_dispositivo || ''}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-[#6CB7BD] text-[#324158] placeholder-[#75A7BD] py-2 px-3 focus:outline-none focus:ring-4 focus:ring-[#34D1B7]/20"
+              />
             </div>
-          ) : (
-            <select name="fk_usuario" value={device.fk_usuario || ''} onChange={handleChange} required>
-              <option value="">-- selecione um paciente --</option>
-              {patients.map((p) => (
-                <option key={p._id} value={p._id}>{p.name} ({p._id})</option>
-              ))}
-            </select>
-          )}
+
+            <div>
+              <label className="block text-sm text-gray-700 mb-1">Tipo</label>
+              <input
+                name="tipo_dispositivo"
+                value={device.tipo_dispositivo || ''}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-[#6CB7BD] text-[#324158] placeholder-[#75A7BD] py-2 px-3 focus:outline-none focus:ring-4 focus:ring-[#34D1B7]/20"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-700 mb-1">Status</label>
+              <select
+                name="status"
+                value={device.status || 'ativo'}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-[#6CB7BD] text-[#324158] py-2 px-3 focus:outline-none focus:ring-4 focus:ring-[#34D1B7]/20"
+              >
+                <option value="ativo">ativo</option>
+                <option value="inativo">inativo</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-700 mb-1">Paciente</label>
+              {patients.length === 0 ? (
+                <div className="text-sm text-red-600">Nenhum paciente encontrado. Crie um paciente antes de adicionar um dispositivo.</div>
+              ) : (
+                <select
+                  name="fk_usuario"
+                  value={device.fk_usuario || ''}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-xl border border-[#6CB7BD] text-[#324158] py-2 px-3 focus:outline-none focus:ring-4 focus:ring-[#34D1B7]/20"
+                >
+                  <option value="">-- selecione um paciente --</option>
+                  {patients.map((p) => (
+                    <option key={p._id} value={p._id}>{p.name}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3 pt-3">
+              <button
+                type="submit"
+                disabled={loading || patients.length === 0}
+                className="py-2 px-4 rounded-full font-semibold text-white bg-gradient-to-r from-[#34D1B7] to-[#357066] hover:from-[#357066] hover:to-[#34D1B7] disabled:opacity-70"
+              >
+                {loading ? 'Salvando...' : 'Salvar'}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navigate('/devices')}
+                className="py-2 px-4 rounded-full font-medium border border-gray-200 text-gray-700 hover:bg-gray-50"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
         </div>
-        <div style={{ marginTop: 12 }}>
-          <button type="submit" disabled={loading || patients.length === 0}>{loading ? 'Salvando...' : 'Salvar'}</button>
-          <button type="button" onClick={() => navigate('/devices')} style={{ marginLeft: 8 }}>Cancelar</button>
-        </div>
-      </form>
+      </div>
     </div>
   )
 }

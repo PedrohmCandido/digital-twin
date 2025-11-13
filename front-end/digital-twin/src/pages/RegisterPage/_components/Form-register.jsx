@@ -58,7 +58,7 @@ export default function Form_register() {
       });
 
       await createPatient({
-        fk_user: user.id,
+        fk_user: user._id,
         name: formData.name,
         email: formData.email,
         phone: formData.phone,

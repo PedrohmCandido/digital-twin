@@ -69,6 +69,14 @@ export default function LandingPage() {
                   Assistente de IA
                 </Link>
 
+                {/* Quick access to TechSheet */}
+                <Link
+                  to="/tech-sheet"
+                  className="rounded-lg border px-3 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
+                >
+                  Ficha Técnica
+                </Link>
+
                 <button
                   onClick={handleLogout}
                   className="rounded-lg bg-primary px-3 py-1.5 text-sm text-primary-foreground hover:opacity-90"
@@ -139,6 +147,12 @@ export default function LandingPage() {
                       className="rounded-lg border px-2.5 py-1 text-sm hover:bg-accent"
                     >
                       Dashboard
+                    </Link>
+                    <Link
+                      to="/devices"
+                      className="rounded-lg border px-2.5 py-1 text-sm hover:bg-accent"
+                    >
+                      Dispositivos
                     </Link>
                     <Link
                       to="/ai-assistant"

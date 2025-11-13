@@ -1,6 +1,14 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Calendar, Home, Inbox, Search, Settings, LogOut } from "lucide-react";
+import {
+  Calendar,
+  Home,
+  Inbox,
+  Search,
+  Settings,
+  LogOut,
+  MonitorSmartphone,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -16,8 +24,7 @@ import {
 const items = [
   { title: "Início", url: "/landing-page", icon: Home },
   { title: "Dashboard", url: "/dashboard", icon: Inbox },
-  { title: "Calendário", url: "/calendar", icon: Calendar },
-  { title: "Pesquisar", url: "/search", icon: Search },
+  { title: "Dispositivos", url: "/devices", icon: MonitorSmartphone },
   { title: "Configurações", url: "/settings", icon: Settings },
 ];
 
@@ -47,19 +54,6 @@ export default function AppSidebar({ onLogout }) {
                   </SidebarMenuItem>
                 );
               })}
-
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <button
-                    type="button"
-                    onClick={onLogout}
-                    className="w-full flex items-center gap-2"
-                  >
-                    <LogOut />
-                    <span>Sair</span>
-                  </button>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
