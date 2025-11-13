@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { aiChat } from '../../services/aiClient';
+import AppSidebar from "../../pages/LandingPage/_components/Sidebar.jsx";
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar.js';
+import { Link } from 'react-router-dom';
 
 export default function AiAssistant() {
   const [messages, setMessages] = useState([
@@ -32,27 +35,58 @@ export default function AiAssistant() {
   }
 
   return (
-    <div style={{ maxWidth: 840, margin: '0 auto', padding: 16 }}>
-      <h1>AI Assistant</h1>
+    <SidebarProvider>
+      <div className="flex w-full">
+        <AppSidebar />
 
-      <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 12, minHeight: 320 }}>
-        {messages.map((m, i) => (
-          <p key={i}>
-            <strong>{m.role === 'user' ? 'Você' : 'Assistente'}:</strong> {m.content}
-          </p>
-        ))}
-        {loading && <p><em>pensando…</em></p>}
+        <div className="flex flex-col flex-1 transition-all duration-300">
+          <header className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 mb-2">
+            <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <SidebarTrigger />
+                <h1 className="text-2xl font-bold text-gray-800">Assistente de IA</h1>
+              </div>
+
+              <div className="flex items-center gap-2">
+              </div>
+            </div>
+          </header>
+
+          <div className="flex-1 p-4">
+            <div className="mx-auto max-w-6xl">
+              <div className="border border-black/10 p-6 rounded-2xl shadow-sm bg-white">
+                <div className="mb-4">
+                  <div className="border rounded-lg p-4 min-h-[320px]">
+                    {messages.map((m, i) => (
+                      <p key={i} className={m.role === 'user' ? 'mb-2 text-right' : 'mb-2 text-left'}>
+                        <strong className="mr-2">{m.role === 'user' ? 'Você' : 'Assistente'}:</strong>
+                        <span>{m.content}</span>
+                      </p>
+                    ))}
+                    {loading && <p className="text-sm text-gray-500"><em>pensando…</em></p>}
+                  </div>
+                </div>
+
+                <form onSubmit={handleSend} className="flex gap-3">
+                  <input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder="Pergunte algo…"
+                    className="flex-1 border rounded px-3 py-2"
+                  />
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="rounded bg-primary text-white px-4 py-2 disabled:opacity-60"
+                  >
+                    Enviar
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <form onSubmit={handleSend} style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Pergunte algo…"
-          style={{ flex: 1 }}
-        />
-        <button disabled={loading}>Enviar</button>
-      </form>
-    </div>
+    </SidebarProvider>
   );
 }
