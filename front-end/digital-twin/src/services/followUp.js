@@ -32,3 +32,22 @@ export async function updateFollowUp(id, { name, email, phone, address, gender, 
     if (!res.ok) throw new Error('API error');
     return res.json();
 }
+
+const API_BASE = "http://localhost:5000";
+
+export async function getFollowUpByUser(userId) {
+  if (!userId) {
+    return { devices: [], followUps: [] };
+  }
+
+  const resp = await fetch(`${API_BASE}/follow-up/me?userId=${userId}`);
+
+  if (!resp.ok) {
+    console.error("Erro ao buscar follow-ups:", resp.status);
+    return { devices: [], followUps: [] };
+  }
+
+  return resp.json(); 
+}
+
+

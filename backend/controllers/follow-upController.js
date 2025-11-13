@@ -1,4 +1,6 @@
 import FollowUp from "../models/Follow-up.js";
+import Device from "../models/Device.js";
+import Patient from "../models/Patient.js";
 
 // GET /acompanhamentos
 export const getAllAcompanhamentos = async (req, res) => {
@@ -42,3 +44,57 @@ export const deleteAcompanhamento = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+
+export const getFollowUpsForLoggedUser = async (req, res) => {
+  try {
+    const userId = req.query.userId;
+    console.log("userId recebido:", userId);
+
+    if (!userId) {
+      return res.status(400).json({ error: "userId é obrigatório na query" });
+    }
+
+    const patients = await Patient.find({ fk_user: userId }).select("_id");
+    console.log("patients:", patients);
+
+    const patientIds = patients.map((p) => p._id);
+
+    const devices = await Device.find({
+      fk_usuario: { $in: patientIds },
+    }).select("_id nome_dispositivo");
+    console.log("devices:", devices);
+
+    const deviceIds = devices.map((d) => d._id);
+
+    const followUps = await FollowUp.find({
+      fk_dispositivo: { $in: deviceIds },
+    }).populate("fk_dispositivo");
+    console.log("followUps:", followUps.length);
+
+    const formatted = followUps.map((f) => ({
+      _id: f._id,
+      fk_dispositivo: f.fk_dispositivo?._id,
+      dispositivo_nome: f.fk_dispositivo?.nome_dispositivo,
+      frequencia_cardiaca_bpm: f.frequencia_cardiaca_bpm,
+      variabilidade_fc_ms: f.variabilidade_fc_ms,
+      ritmo_cardiaco: f.ritmo_cardiaco,
+      oxigenacao_spo2: f.oxigenacao_spo2,
+      calorias_queimadas_kcal: f.calorias_queimadas_kcal,
+      nivel_estresse: f.nivel_estresse,
+      timestamp: f.timestamp,
+    }));
+
+    return res.json({
+      devices: devices.map((d) => ({
+        id: d._id,
+        nome_dispositivo: d.nome_dispositivo,
+      })),
+      followUps: formatted,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Erro ao buscar follow-ups" });
+  }
+};
+
